@@ -1,5 +1,5 @@
 import "./landing.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react"; // Import useRef
 import Barcode from "react-barcode";
 import axios from "axios";
 
@@ -13,6 +13,9 @@ function LandingPage() {
   const [ticketData, setTicketData] = useState(null);
   const [ticketCount, setTicketCount] = useState(1);
   const [uploadProgress, setUploadProgress] = useState(0); // State for upload progress
+
+  // Create a ref for the file input
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     const savedData = JSON.parse(localStorage.getItem("ticketData"));
@@ -131,6 +134,7 @@ function LandingPage() {
     printWindow.document.close();
     printWindow.print();
   };
+
   const handleSelect = (ticketType) => {
     setSelectedTicket(ticketType);
   };
@@ -199,6 +203,20 @@ function LandingPage() {
       localStorage.setItem("ticketData", JSON.stringify(ticketInfo));
       setActiveSection("mainMenu3");
     }
+  };
+
+  // Function to reset form data
+  const resetForm = () => {
+    setFullName("");
+    setEmail("");
+    setAvatar("");
+    setTicketCount(1);
+    setSelectedTicket("Free");
+    setTicketData(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // Clear the file input
+    }
+    setActiveSection("mainMenu");
   };
 
   return (
@@ -342,6 +360,7 @@ function LandingPage() {
                     className="file"
                     type="file"
                     id="hiddenFileInput"
+                    ref={fileInputRef} // Attach ref to the file input
                     onChange={handleAvatarUpload}
                   />
                   <label htmlFor="hiddenFileInput" className="photo">
@@ -353,8 +372,7 @@ function LandingPage() {
                 </div>
                 {uploadProgress > 0 && (
                   <p>Upload Progress: {uploadProgress}%</p>
-                )}{" "}
-                {/* Display upload progress */}
+                )}
               </div>
             </div>
             <div className="line"></div>
@@ -446,15 +464,6 @@ function LandingPage() {
                         <p>{ticketData.ticketNumber}</p>
                       </div>
                     </div>
-                    <div className="row">
-                      {/* <div className="cell full-width">
-                        <span>Special request?</span>
-                        <p>
-                          Nil? Or the user's sad story they write in here gets
-                          this whole space, max of three rows.
-                        </p>
-                      </div> */}
-                    </div>
                   </div>
                 </div>
               </div>
@@ -475,7 +484,7 @@ function LandingPage() {
             <div className="buttons2">
               <button
                 className="cancel"
-                onClick={() => setActiveSection("mainMenu")}
+                onClick={resetForm} // Call resetForm here
               >
                 Book Another Ticket
               </button>
