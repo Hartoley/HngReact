@@ -1,7 +1,6 @@
 import "./landing.css";
 import React, { useEffect, useState } from "react";
 import Barcode from "react-barcode";
-import axios from "axios";
 
 function LandingPage() {
   const [activeSection, setActiveSection] = useState("mainMenu");
@@ -11,10 +10,9 @@ function LandingPage() {
   const [avatar, setAvatar] = useState("");
   const [error, setError] = useState("");
   const [ticketData, setTicketData] = useState(null);
-  const [ticketCount, setTicketCount] = useState(1);
-  const [uploadProgress, setUploadProgress] = useState(0); // State for upload progress
 
   useEffect(() => {
+    // Load saved data from localStorage
     const savedData = JSON.parse(localStorage.getItem("ticketData"));
     if (savedData) {
       setFullName(savedData.fullName);
@@ -27,53 +25,33 @@ function LandingPage() {
     setSelectedTicket(ticketType);
   };
 
-  const handleAvatarUpload = async (event) => {
+  const handleAvatarUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "ml_default"); // Replace with your upload preset
-
-      try {
-        const response = await axios.post(
-          `https://api.cloudinary.com/v1_1/dm27cd4jp/image/upload`, // Replace with your Cloudinary cloud name
-          formData,
-          {
-            onUploadProgress: (progressEvent) => {
-              const { loaded, total } = progressEvent;
-              const percent = Math.floor((loaded * 100) / total);
-              setUploadProgress(percent); // Update upload progress
-              console.log(`Upload Progress: ${percent}%`); // Log progress
-            },
-          }
-        );
-        setAvatar(response.data.secure_url); // Set the avatar URL from Cloudinary
-      } catch (error) {
-        console.error("Error uploading image:", error);
-        setError("Error uploading image. Please try again.");
-      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatar(reader.result); // Set the avatar URL
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   const validateForm = () => {
     if (!fullName || !email || !avatar) {
-      alert("All fields are required.");
+      setError("All fields are required.");
       return false;
     }
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
-      alert("Please enter a valid email address.");
+      setError("Please enter a valid email address.");
       return false;
     }
     if (!avatar.startsWith("http")) {
-      alert("Please upload a valid image URL.");
+      setError("Please upload a valid image URL.");
       return false;
     }
-    if (ticketCount < 1) {
-      alert("Please select at least one ticket.");
-      return false;
-    }
-    return true; // Ensure to return true if all validations pass
+    setError("");
+    return true;
   };
 
   const handleSubmit = () => {
@@ -83,9 +61,6 @@ function LandingPage() {
         email,
         avatar,
         selectedTicket,
-        ticketCount,
-        ticketNumber: Math.floor(Math.random() * 1000000000).toString(),
-        price: selectedTicket === "Free" ? 0 : 150,
       };
       setTicketData(ticketInfo);
       localStorage.setItem("ticketData", JSON.stringify(ticketInfo));
@@ -135,6 +110,7 @@ function LandingPage() {
             }`}
           ></div>
         </div>
+
         {activeSection === "mainMenu" && (
           <div className="selection">
             <div className="techMaster">
@@ -144,6 +120,7 @@ function LandingPage() {
                 your spot now.
               </p>
               <p className="fest2">
+                {" "}
                 📍 [Event Location] || March 15, 2025 | 7:00 PM
               </p>
             </div>
@@ -186,16 +163,16 @@ function LandingPage() {
             </div>
             <div className="number">
               <p>Number of Tickets</p>
-              <select
-                className="numbers"
-                value={ticketCount}
-                onChange={(e) => setTicketCount(Number(e.target.value))}
-              >
-                {[...Array(9)].map((_, index) => (
-                  <option key={index} value={index + 1}>
-                    {index + 1}
-                  </option>
-                ))}
+              <select className="numbers" name="" id="">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
               </select>
             </div>
             <div className="buttons">
@@ -209,6 +186,7 @@ function LandingPage() {
             </div>
           </div>
         )}
+
         {activeSection === "mainMenu2" && (
           <div className="selection1">
             <div className="uploadSection">
@@ -228,10 +206,6 @@ function LandingPage() {
                     <p>Drag & drop OR click to upload</p>
                   </label>
                 </div>
-                {uploadProgress > 0 && (
-                  <p>Upload Progress: {uploadProgress}%</p>
-                )}{" "}
-                {/* Display upload progress */}
               </div>
             </div>
             <div className="line"></div>
@@ -239,6 +213,7 @@ function LandingPage() {
               <p>Enter your name</p>
               <input
                 type="text"
+                value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
               />
               <p>Enter your email*</p>
@@ -250,9 +225,11 @@ function LandingPage() {
                   style={{ border: "none", width: "80%", height: "95%" }}
                   type="text"
                   placeholder="hello@gmail.com"
+                  value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
+              {error && <p className="error">{error}</p>}
               <p>Special Request?</p>
               <textarea name="textarea" placeholder="Textarea" id=""></textarea>
               <div className="buttons1">
@@ -269,6 +246,7 @@ function LandingPage() {
             </form>
           </div>
         )}
+
         {activeSection === "mainMenu3" && ticketData && (
           <div className="selection2">
             <div className="ready">
@@ -284,13 +262,7 @@ function LandingPage() {
                   <p>📍 04 Rumens Road, Ikoyi, Lagos</p>
                   <p>📅 March, 15, 2025 | 7:00 PM</p>
                   <div className="picture">
-                    <img
-                      width={"100%"}
-                      height={"100%"}
-                      borderRadius={"20px"}
-                      src={ticketData.avatar}
-                      alt="Avatar"
-                    />
+                    <img src={ticketData.avatar} alt="Avatar" />
                   </div>
                   <div className="details">
                     <div className="row">
@@ -309,35 +281,25 @@ function LandingPage() {
                         <p>{ticketData.selectedTicket}</p>
                       </div>
                       <div className="cell">
-                        <span>Price:</span>
-                        <p>${ticketData.price}</p>
+                        <span>Ticket for:</span>
+                        <p>1</p>
                       </div>
                     </div>
                     <div className="row">
-                      <div className="cell">
-                        <span>Number of Tickets:</span>
-                        <p>{ticketData.ticketCount}</p>
-                      </div>
-                      <div className="cell">
-                        <span>Ticket Number:</span>
-                        <p>{ticketData.ticketNumber}</p>
-                      </div>
-                    </div>
-                    <div className="row">
-                      {/* <div className="cell full-width">
+                      <div className="cell full-width">
                         <span>Special request?</span>
                         <p>
                           Nil? Or the user's sad story they write in here gets
                           this whole space, max of three rows.
                         </p>
-                      </div> */}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
               <div className="myTicket1">
                 <Barcode
-                  value={ticketData.ticketNumber}
+                  value="987654321098"
                   format="CODE128"
                   width={2}
                   height={50}

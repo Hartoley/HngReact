@@ -563,6 +563,10 @@ form p {
   font-size: 10px;
 }
 
+img {
+  border-radius: 20px;
+}
+
 .row {
   display: flex;
   justify-content: space-between;
