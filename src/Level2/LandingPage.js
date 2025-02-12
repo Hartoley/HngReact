@@ -23,6 +23,114 @@ function LandingPage() {
     }
   }, []);
 
+  const handleDownloadTicket = () => {
+    const ticketSection = document.querySelector(".theTicket");
+    const printWindow = window.open("", "_blank");
+
+    // Write the HTML content to the new window
+    printWindow.document.write(`
+    <html>
+      <head>
+        <title>Print Ticket</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            margin: 10px; /* Reduced margin */
+            padding: 0; /* No padding */
+          }
+          .theTicket {
+            max-width: 100%; /* Use full width */
+            margin: 0 auto; /* Center the ticket */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+          }
+          .myTicket {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(rgb(18, 89, 100) 0%, rgb(8, 46, 51) 100%);
+            border: solid 1.5px rgb(26, 120, 137);
+            padding: 5px; /* Reduced padding */
+            box-sizing: border-box; /* Include padding in width */
+          }
+          .myTicket1 {
+            width: 100%;
+            background-image: radial-gradient(rgb(18, 89, 100), rgb(8, 46, 51));
+            border: solid 1.5px rgb(26, 120, 137);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px; /* Reduced padding */
+            box-sizing: border-box; /* Include padding in width */
+          }
+          .techember {
+            width: 90%; /* Slightly reduced width */
+            border: solid 1.5px rgb(14, 74, 83);
+            border-radius: 10px; /* Reduced border radius */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 5px; /* Reduced padding */
+            font-size: 12px; /* Reduced font size */
+            font-weight: 400;
+            line-height: 1.2; /* Adjusted line height */
+            gap: 5px; /* Reduced gap */
+          }
+          .picture {
+            width: 70%;
+            background-color: rgb(16, 36, 39);
+            border: solid 2px rgb(85, 222, 243); /* Reduced border size */
+            border-radius: 10px; /* Reduced border radius */
+            margin-bottom: 5px; /* Added margin for spacing */
+          }
+          .details {
+            width: 95%;
+            background-color: rgb(8, 52, 60);
+            border-radius: 5px; /* Reduced border radius */
+            border: solid 1px rgb(15, 57, 63);
+            color: white;
+            padding: 5px;
+            font-size: 10px;
+          }
+          .row {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgb(14, 62, 70);
+            padding: 0.3rem 0; /* Reduced padding */
+          }
+          .row:last-child {
+            border-bottom: none;
+          }
+          .cell {
+            flex: 1;
+            padding: 0 0.3rem; /* Reduced padding */
+          }
+          .cell span {
+            display: block;
+            font-weight: bold;
+            color: #cfcfcf;
+            margin-bottom: 0.1rem; /* Reduced margin */
+          }
+          .cell p {
+            margin: 0;
+            color: #ffffff;
+            font-size: 10px; /* Reduced font size */
+          }
+        </style>
+      </head>
+      <body>
+        ${ticketSection.innerHTML}
+      </body>
+    </html>
+  `);
+
+    printWindow.document.close();
+    printWindow.print();
+  };
   const handleSelect = (ticketType) => {
     setSelectedTicket(ticketType);
   };
@@ -103,7 +211,22 @@ function LandingPage() {
               <a href="#">Events</a>
             </li>
             <li>
-              <a href="#">My Tickets</a>
+              <a
+                href="#"
+                onClick={() => {
+                  const savedData = JSON.parse(
+                    localStorage.getItem("ticketData")
+                  );
+                  if (savedData) {
+                    setTicketData(savedData);
+                    setActiveSection("mainMenu3");
+                  } else {
+                    alert("No tickets found.");
+                  }
+                }}
+              >
+                My Tickets
+              </a>
             </li>
             <li>
               <a href="#">About Project</a>
@@ -340,7 +463,7 @@ function LandingPage() {
                   value={ticketData.ticketNumber}
                   format="CODE128"
                   width={2}
-                  height={50}
+                  height={45}
                   displayValue={true}
                   background="#ffffff"
                   opacity={1}
@@ -356,10 +479,7 @@ function LandingPage() {
               >
                 Book Another Ticket
               </button>
-              <button
-                className="next"
-                onClick={() => setActiveSection("mainMenu2")}
-              >
+              <button className="next" onClick={handleDownloadTicket}>
                 Download Ticket
               </button>
             </div>
