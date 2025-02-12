@@ -193,7 +193,7 @@ function LandingPage() {
         selectedTicket,
         ticketCount,
         ticketNumber: Math.floor(Math.random() * 1000000000).toString(),
-        price: selectedTicket === "Free" ? 0 : 150,
+        price: selectedTicket === "Free" ? 0 : 150 * ticketCount,
       };
       setTicketData(ticketInfo);
       localStorage.setItem("ticketData", JSON.stringify(ticketInfo));
