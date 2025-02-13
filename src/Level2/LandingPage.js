@@ -217,6 +217,7 @@ function LandingPage() {
       fileInputRef.current.value = ""; // Clear the file input
     }
     setActiveSection("mainMenu");
+    window.location.reload();
   };
 
   return (
@@ -250,7 +251,17 @@ function LandingPage() {
               <a href="#">About Project</a>
             </li>
           </ul>
-          <div className="cta-button">MY TICKETS →</div>
+          <div      onClick={() => {
+                  const savedData = JSON.parse(
+                    localStorage.getItem("ticketData")
+                  );
+                  if (savedData) {
+                    setTicketData(savedData);
+                    setActiveSection("mainMenu3");
+                  } else {
+                    alert("No tickets found.");
+                  }
+                }} className="cta-button">MY TICKETS →</div>
         </div>
       </nav>
 
@@ -367,12 +378,14 @@ function LandingPage() {
                     <span id="icon" className="material-symbols-outlined">
                       cloud_download
                     </span>
-                    <p>Drag & drop OR click to upload</p>
+                 {uploadProgress === 0 && <p>Drag & drop OR click to upload</p>}
+{uploadProgress > 0 && uploadProgress < 100 && (
+  <p>Uploading... {uploadProgress}%</p>
+)}
+{uploadProgress === 100 && <p>Upload Complete!</p>}
                   </label>
                 </div>
-                {uploadProgress > 0 && (
-                  <p>Upload Progress: {uploadProgress}%</p>
-                )}
+                
               </div>
             </div>
             <div className="line"></div>

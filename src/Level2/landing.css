@@ -599,34 +599,246 @@ img {
   flex: 100%;
 }
 
-@media (max-width: 768px) {
-  .nav-container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+@media (max-width: 480px) {
+  .techMaster {
+  height: 22%;
+}
+
+  .ready{
+    width:80%;
+    text-align:center;
+
+  }
+  .theTicket{
+    width:80%;
+    text-align:center;
+  }
+ 
+    .mainContainer {
+    height: 180vh;
+  
+
+  }
+
+  
+  .selectionList {
+    margin-bottom: 20vh;
+  }
+
+  input,
+  textarea {
+    width: 100%; 
+  }
+
+  textarea{
+    height:25%;/* Full width for inputs */
+
+  }
+ 
+
+  .input input {
+    width: 100%; /* Full width for input */
+  }
+
+  .number{
+    /* background-color:red; */
+    margin-top:15vh;
+
+  }
+
+  .buttons{
+   height:10vh;
+   /* background:red; */
+  }
+
+  .buttons button{
+    width:45%;
+  }
+
+
+
+  .logo {
+    font-size: 1.2rem;
   }
 
   .nav-links {
     flex-direction: column;
     gap: 1rem;
+    display: none;
   }
 
-  .cta-button {
-    align-self: flex-end;
-  }
-}
-
-@media (max-width: 480px) {
-  .logo {
-    font-size: 1.2rem;
+  .nav-links.active {
+    display: flex; /* Show when active */
   }
 
-  .nav-links a {
-    font-size: 0.9rem;
-  }
+
 
   .cta-button {
     font-size: 0.9rem;
     padding: 0.4rem 0.8rem;
   }
+
+  .ticketSection {
+    width: 90%;
+    height:95%;
+    justify-content:space-evenly;
+  }
+
+  .ticket {
+    width: 100%; /* Full width for tickets */
+    height: 15vh;
+  }
+
+  .uploadSection {
+    width: 100%;
+  }
+
+  
+  .buttons1{
+    height:20%;
+    flex-direction: column; /* Stack buttons vertically */
+  }
+
+    .buttons2 {
+    height:10%;
+    flex-direction: column; /* Stack buttons vertically */
+  }
+
+  button {
+    width: 100%; /* Full width for buttons */
+    margin: 0.5rem 0; /* Add margin for spacing */
+  }
+
+  .toggle-button {
+    display: block; /* Show toggle button */
+    cursor: pointer;
+  }
 }
+
+/* Small Devices (Tablets) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .selectionList {
+    margin-bottom: 20vh;
+  }
+
+  .nav-container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .nav-links {
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .ticketSection {
+    width: 80%; /* Adjust width for tablets */
+  }
+
+  .ticket {
+    width: 45%; /* Adjust ticket width */
+    height: 15vh;
+  }
+
+  .uploadSection {
+    width: 90%;
+  }
+
+  .buttons {
+    flex-direction: row; /* Keep buttons in a row */
+    justify-content: space-between;
+  }
+
+  button {
+    width: 48%; /* Adjust button width */
+  }
+}
+
+/* Medium Devices (Desktops) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .selectionList {
+    margin-bottom: 20vh;
+  }
+
+  .nav-container {
+    justify-content: space-between;
+  }
+
+  .ticketSection {
+    width: 70%; /* Adjust width for desktops */
+  }
+
+  .ticket {
+    width: 30%; /* Adjust ticket width */
+    height: 15vh;
+  }
+
+  .uploadSection {
+    width: 80%;
+  }
+
+  .buttons {
+    flex-direction: row; /* Keep buttons in a row */
+    justify-content: space-between;
+  }
+
+  button {
+    width: 45%; /* Adjust button width */
+  }
+}
+
+/* Large Devices (Laptops and Desktops) */
+@media (min-width: 1025px) {
+  .selectionList {
+    margin-bottom: 20vh;
+  }
+
+  .nav {
+    width: 75%;
+  }
+
+  .ticketSection {
+    width: 50%; /* Adjust width for larger screens */
+  }
+
+  .ticket {
+    width: 30%; /* Maintain ticket width */
+    height: 15vh;
+  }
+
+  .uploadSection {
+    width: 70%;
+  }
+
+  .buttons {
+    flex-direction: row; /* Keep buttons in a row */
+    justify-content: space-between;
+  }
+
+  button {
+    width: 45%; /* Adjust button width */
+  }
+}
+
+/* Additional Styles for Accessibility and Usability */
+@media (max-width: 768px) {
+  .selectionList {
+    margin-bottom: 20vh;
+  }
+
+  .nav-links {
+    display: none; /* Hide links by default */
+  }
+
+  .nav-links.active {
+    display: flex; /* Show links when active */
+  }
+
+  .toggle-button {
+    display: block; /* Show toggle button */
+    cursor: pointer;
+  }
+}
+
+/* Adjustments for Forms and Inputs */
+
